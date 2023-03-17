@@ -1,35 +1,28 @@
 import React from "react";
-import {Image, StyleSheet, Text, View} from "react-native";
+import { StyleSheet, View} from "react-native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
-import TransactionsScreen from "../screens/SearchScreen";
-import StatisticsScreen from "../screens/FavoriteScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import {COLORS} from "../theme/theme";
-import AddButton from "../components/AddButton";
-import {useTabMenu} from "../context/TabContext";
-// import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { Navigater ,NavigaterSearch } from "./MainNavigator";
+import FavoriteScreen from "../screens/FavoriteScreen";
+
 
 const Tab = createBottomTabNavigator();
 
-const getIconColor = focused => ({
-  tintColor: focused ? COLORS.primary : COLORS.dark,
-});
-
 const TabsNavigator = () => {
-  const {opened, toggleOpened} = useTabMenu();
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+    independent={true}
+      initialRouteName="home"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
       }}>
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="home"
+        component={Navigater}
         options={{
           tabBarItemStyle: {
             height: 0,
@@ -37,17 +30,14 @@ const TabsNavigator = () => {
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
               <AntDesign name="home" size={28} color={focused? '#00CC99':'#fff'} />
-              
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && e.preventDefault(),
-        }}
+        
       />
       <Tab.Screen
-        name="Transactions"
-        component={TransactionsScreen}
+        name="search"
+        component={NavigaterSearch}
         options={{
           tabBarItemStyle: {
             height: 0,
@@ -55,33 +45,14 @@ const TabsNavigator = () => {
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
               <AntDesign name="search1" size={28} color={focused? '#00CC99':'#fff'} />
-              {/* <Image
-                source={require("../../assets/images/Transactions.png")}
-                resizeMode="contain"
-                style={[styles.tabIcon, getIconColor(focused)]}
-              /> */}
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && e.preventDefault(),
-        }}
       />
-      {/* <Tab.Screen
-        name="Add"
-        component={HomeScreen}
-        options={{
-          tabBarItemStyle: {
-            height: 0,
-          },
-          tabBarButton: () => (
-            <AddButton opened={opened} toggleOpened={toggleOpened} />
-          ),
-        }}
-      /> */}
+      
       <Tab.Screen
-        name="Statistics"
-        component={StatisticsScreen}
+        name="favorite"
+        component={FavoriteScreen}
         options={{
           tabBarItemStyle: {
             height: 0,
@@ -89,19 +60,12 @@ const TabsNavigator = () => {
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
               <AntDesign name="hearto" size={28} color={focused? '#00CC99':'#fff'} />
-
-              {/* <Image
-                source={require("../../assets/images/Graph.png")}
-                resizeMode="contain"
-                style={[styles.tabIcon, getIconColor(focused)]}
-              /> */}
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && e.preventDefault(),
-        }}
       />
+      
+      
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}
@@ -112,20 +76,10 @@ const TabsNavigator = () => {
           tabBarIcon: ({focused}) => (
             <View style={styles.tabIconContainer}>
               <AntDesign name="setting" size={28} color={focused? '#00CC99':'#fff'} />
-              {/* <Image
-                source={require("../../assets/images/Setting.png")}
-                resizeMode="contain"
-                style={[styles.tabIcon, getIconColor(focused)]}
-              /> */}
-              
-              
-              
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && e.preventDefault(),
-        }}
+       
       />
     </Tab.Navigator>
   );

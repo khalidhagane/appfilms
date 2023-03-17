@@ -1,92 +1,128 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { COLORS } from "../theme/theme";
-import TabContainer from "../components/TabContainer";
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from "react-native-vector-icons/AntDesign";
+// import { useDispatch, useSelector } from "react-redux";
+// import {searchMovies} from '../../features/movies/searchMovies'
 
-const SearchScreen = () => {
+
+const SearchScreen = ({navigation}) => {
+
   const [searchTerm, setSearchTerm] = useState("");
+  const [movies, setMovies] = useState([]);
+//   const dispatch = useDispatch();
+// const movies = useSelector((state) => state.movies.data.results);
+
+
+//   useEffect(() => {
+//     dispatch(searchMovies());
+// },[])
+
+  const pathImg = "https://image.tmdb.org/t/p/w500";
+
+  
+  const searchData = async (searchTerm) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=9fb7ddbe7eae0462355b142582be0d1c&language=en-US&query=${searchTerm}&page=1&include_adult=false`
+    );
+    const data = await response.json();
+    setMovies(data.results);
+  };
+
 
   const handleSearch = (text) => {
     setSearchTerm(text);
+    searchData(text);
   };
 
-  return (
-    <TabContainer>
-      <View style={styles.container}>
-        <View style={styles.headerSearch} >
-      <AntDesign name="arrowleft" size={28} color= '#fff' />
-        
-        <TextInput 
-        
+  const renderItem = ({ item }) => (
+    <TouchableWithoutFeedback onPress={() => navigation.navigate("detaile", {item})}>
+      <View style={styles.wrapper}>
+        {item.poster_path !== null ? (
+          <Image
+            source={{ uri: pathImg + item.poster_path }}
+            style={styles.imgSearch}
+          />
+        ) : (
+          <Text style={styles.image}>{item.original_title}</Text>
+        )}
 
+        <View style={styles.averege}>
+          <Text style={styles.aver}>{item.vote_average.toFixed(1)}</Text>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.headerSearch}>
+        {/* <AntDesign name="arrowleft" size={28} color="#fff" /> */}
+        <TextInput
           style={styles.input}
           placeholder="Search"
           onChangeText={handleSearch}
           value={searchTerm}
-          // color='#fff'
-
         />
-        {/* <Text style={styles.text}>Search Screen</Text> */}
-      {/* <AntDesign name="search1" size={28} color= '#00CC99' style={styles.Designflich} /> */}
-        </View>
       </View>
-      
-    </TabContainer>
+      <View>
+        <FlatList
+          data={movies}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={3}
+          onEndReachedThreshold={0.5}
+          columnWrapperStyle={styles.row}
+          style={styles.flatList}
+        />
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // paddingTop:20,
-    // flexWrap:'nowrap',
-
     flex: 1,
-    flexDirection:'row',
-    // alignItems: "center",
-    justifyContent: "center",
     backgroundColor: COLORS.bg,
-    // backgroundColor: '#fff',
-
   },
-  headerSearch:{
-    paddingTop:20,
-    // flexWrap:'nowrap',
-
-    // flex: 1,
-    flexDirection:'row',
-    // alignItems: "center",
+  headerSearch: {
+    paddingTop: 20,
+    flexDirection: "row",
     justifyContent: "center",
-    backgroundColor: '#272E3A',
-    height:80,
-    width:360,
-    
+    backgroundColor: "#272E3A",
+    height: 80,
+    width: "100%",
   },
-  // text: {
-  //   fontWeight: "bold",
-  //   fontSize: 32,
-  //   color: COLORS.body,
-  // }
-  
   input: {
-    
     height: 40,
     width: "75%",
     borderColor: COLORS.border,
     borderWidth: 1,
-    borderRadius: 20,
     paddingHorizontal: 20,
     marginBottom: 20,
-    color:COLORS.dark,
-    // marginLeft:10,
-    marginRight:8,
-    marginStart:20,
-    backgroundColor: '#fff',
-    
+    color: COLORS.dark,
+    marginRight: 8,
+    marginStart: 8,
+    backgroundColor: "#fff",
   },
-  // Designflich:{
-  //   // margin:7
-  // }
-});
-
-export default SearchScreen;
+  imgSearch: {
+    width: 100,
+    height: 150,
+  },
+  wrapper: {
+    flex: 1,
+    margin: 5,
+    height: 180,
+    borderRadius: 10,
+    overflow: "hidden",
+  }
+})
+export default SearchScreen

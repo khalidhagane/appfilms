@@ -1,15 +1,12 @@
 import React from "react";
 import {View, Text, StyleSheet} from "react-native";
 import {COLORS} from "../theme/theme";
-import TabContainer from "../components/TabContainer";
 
 const FavoriteScreen = () => {
   return (
-    <TabContainer>
       <View style={styles.container}>
         <Text style={styles.text}>Favorite Screen</Text>
       </View>
-    </TabContainer>
   );
 };
 

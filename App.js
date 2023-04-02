@@ -1,14 +1,26 @@
-import { Provider } from "react-redux";
-import store from "./app/store";
-import React from "react";
-import MainNavigator from "./src/navigations/MainNavigator";
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import MainNavigator from './navigation/MainNavigator'
+import { Provider } from 'react-redux'
+import store from './app/store'
+
+
+
 
 const App = () => {
-  return( 
+  return (
     <Provider store={store}>
-      <MainNavigator />
+      <View style={styles.container}>
+        <MainNavigator />
+      </View>
     </Provider>
-  );
-};
+  )
+}
 
-export default App;
+export default App
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }
+})

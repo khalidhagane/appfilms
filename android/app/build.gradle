@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.appfilms"
+    namespace "com.app_movies"
     defaultConfig {
-        applicationId "com.appfilms"
+        applicationId "com.app_movies"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
